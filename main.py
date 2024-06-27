@@ -72,7 +72,7 @@ def jogar(nome):
     tamanhoSol = 60
     tamanhoSolMaximo = 70
     tamanhoSolMinimo = 50
-    velocidadeSol = 0.05
+    velocidadeSol = 0.10
 
     while True:
         for evento in pygame.event.get():
