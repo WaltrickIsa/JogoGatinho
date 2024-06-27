@@ -72,7 +72,7 @@ def jogar(nome):
     tamanhoSol = 60
     tamanhoSolMaximo = 70
     tamanhoSolMinimo = 50
-    velocidadeSol = 0.2
+    velocidadeSol = 0.05
 
     while True:
         for evento in pygame.event.get():
@@ -186,11 +186,11 @@ def fim(nome, pontos):
                     jogar(nome)
         tela.fill(branco)
         tela.blit(fundoPerdeu, (0,0)) 
-        buttonStart = pygame.draw.rect(tela, preto, (35,482,750,100),0)
+        buttonStart = pygame.draw.rect(tela, preto, (40,300,280,200),0)
         textoStart = fonteInicio.render("Reiniciar", True, branco)
-        tela.blit(textoStart, (400,482))
+        tela.blit(textoStart, (60,300))
         textoEnter = fonte.render("Pressione Enter para continuar...", True, branco)
-        tela.blit(textoEnter, (60,482))
+        tela.blit(textoEnter, (60,200))
         pygame.display.update()
         relogio.tick(60)
 
