@@ -3,6 +3,8 @@ import random
 import os
 import time
 from tkinter import simpledialog
+from funcoes import limpar
+limpar()
 
 pygame.init()
 
@@ -15,6 +17,7 @@ fundoPerdeu = pygame.image.load("recursos/FundoChuvaPerdeu.png")
 
 inimigoAgua = pygame.image.load("recursos/inimigoAgua.png")
 inimigoRaio = pygame.image.load("recursos/inimigoRaio.png")
+estrela = pygame.image.load("recursos/estrela.png")
 tamanho = (600,400)
 tela = pygame.display.set_mode( tamanho ) 
 pygame.display.set_caption("Gatinho na Chuva")
@@ -40,10 +43,13 @@ def jogar(nome):
     movimentoXPersona  = 0
     posicaoXinimigoAgua = 400
     posicaoYinimigoAgua = -240
+    posicaoXEstrela = 0
+    posicaoYEstrela = 50
     velocidadeinimigoAgua = 1
     pontos = 0
     larguraPersona = 40
     alturaPersona = 40
+    velocidadeEstrela = 1.5
     largurainimigoAgua  = 8
     alturainimigoAgua  = 10
     dificuldade  = 2
@@ -54,8 +60,8 @@ def jogar(nome):
     posicaoXPersona = 400
     posicaoYPersona = 300
     movimentoXPersona  = 0
-    posicaoXinimigoRaio = 400
-    posicaoYinimigoRaio = -240
+    posicaoXinimigoRaio = 100
+    posicaoYinimigoRaio = -200
     velocidadeinimigoRaio = 1
     pontos = 0
     larguraPersona = 40
@@ -63,6 +69,10 @@ def jogar(nome):
     largurainimigoRaio = 8
     alturainimigoRaio = 10
     dificuldade  = 2
+    tamanhoSol = 60
+    tamanhoSolMaximo = 70
+    tamanhoSolMinimo = 50
+    velocidadeSol = 0.05
 
     while True:
         for evento in pygame.event.get():
@@ -87,13 +97,20 @@ def jogar(nome):
         tela.fill(branco)
         tela.blit(fundoJogo, (0,0) )
         
-        sol = pygame.draw.circle(tela, amarelo, (525, 60), 40 )
+        pygame.draw.circle(tela, amarelo, (525, 60), tamanhoSol )
+        #tamanhoSol = tamanhoSol + 1
+        tamanhoSol += velocidadeSol
+        if tamanhoSol >= tamanhoSolMaximo or tamanhoSol <= tamanhoSolMinimo:
+            velocidadeSol =- velocidadeSol
+        
+
+      
 
         tela.blit( gatinho, (posicaoXPersona, posicaoYPersona) )
         
         posicaoYinimigoAgua = posicaoYinimigoAgua + velocidadeinimigoAgua
         if posicaoYinimigoAgua > 600:
-            posicaoYinimigoAgua = -240
+            posicaoYinimigoAgua = -40
             pontos = pontos + 1
             velocidadeinimigoAgua = velocidadeinimigoAgua + 1
             posicaoXinimigoAgua = random.randint(0,600)
@@ -101,14 +118,20 @@ def jogar(nome):
 
         posicaoYinimigoRaio = posicaoYinimigoRaio + velocidadeinimigoRaio
         if posicaoYinimigoRaio > 600:
-            posicaoYinimigoRaio = -240
+            posicaoYinimigoRaio = -40
             pontos = pontos + 1
             velocidadeinimigoRaio = velocidadeinimigoRaio + 1
             posicaoXinimigoRaio = random.randint(0,600)
             pygame.mixer.Sound.play(inimigoRaioSound)
             
-            
+        posicaoXEstrela= posicaoXEstrela + velocidadeEstrela
+        if posicaoXEstrela > 600:
+            posicaoXEstrela = 600
+            posicaoXEstrela = 0
+
+        tela.blit( estrela, (posicaoXEstrela, posicaoYEstrela))
         tela.blit( inimigoAgua, (posicaoXinimigoAgua, posicaoYinimigoAgua) )
+        tela.blit( inimigoRaio, (posicaoXinimigoRaio, posicaoYinimigoRaio) )
         
         texto = fonte.render(nome+"- Pontos: "+str(pontos), True, branco)
         tela.blit(texto, (10,10))
@@ -163,11 +186,11 @@ def fim(nome, pontos):
                     jogar(nome)
         tela.fill(branco)
         tela.blit(fundoPerdeu, (0,0)) 
-        buttonStart = pygame.draw.rect(tela, preto, (35,482,750,100),0)
+        buttonStart = pygame.draw.rect(tela, preto, (40,300,280,200),0)
         textoStart = fonteInicio.render("Reiniciar", True, branco)
-        tela.blit(textoStart, (400,482))
+        tela.blit(textoStart, (60,300))
         textoEnter = fonte.render("Pressione Enter para continuar...", True, branco)
-        tela.blit(textoEnter, (60,482))
+        tela.blit(textoEnter, (60,200))
         pygame.display.update()
         relogio.tick(60)
 
@@ -236,7 +259,7 @@ def start():
         
         
         pygame.display.update()
-        relogio.tick(60)
+        relogio.tick(120)
 
 
 start()

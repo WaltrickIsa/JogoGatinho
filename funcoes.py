@@ -1,2 +1,5 @@
-#trazer os def para cá e usar from import
+import os
+
+def limpar():
+    os.system("cls")
 
